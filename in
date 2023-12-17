@@ -1,0 +1,28 @@
+import vk_api
+from vk_api.longpoll import VkLongPoll, VkEventType
+
+# Авторизация бота
+def auth_handler():
+    key = input("Enter authentication code: ")
+    remember_device = True
+    return key, remember_device
+
+vk_session = vk_api.VkApi(token='your_access_token', auth_handler=auth_handler)
+vk = vk_session.get_api()
+longpoll = VkLongPoll(vk_session)
+
+# Обработка команд от пользователя
+for event in longpoll.listen():
+    if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
+        if event.text.lower() == 'п инфо':
+            user_id = event.user_id
+            user_info = vk.users.get(user_ids=user_id)
+            user_name = user_info[0]['first_name']
+            user_last_name = user_info[0]['last_name']
+            user_city = user_info[0]['city']['title'] if 'city' in user_info[0] else 'Unknown'
+            response = f"Имя: {user_name}\nФамилия: {user_last_name}\nГород: {user_city}"
+            vk.messages.send(
+                user_id=event.user_id,
+                message=response,
+                random_id=0
+            )
