@@ -1,0 +1,78 @@
+# Код для приложения вк с двумя окнами для ввода и генерации результатов
+
+# Импорт библиотеки для создания графического интерфейса
+import tkinter as tk
+
+# Создание функции для генерации результатов
+def generate_results():
+    # Получение введенных значений из текстовых полей
+    word1 = entry1.get()
+    word2 = entry2.get()
+    word3 = entry3.get()
+    word4 = entry4.get()
+    word5 = entry5.get()
+    word6 = entry6.get()
+    
+    # Проверка, что все поля заполнены
+    if word1 and word2 and word3 and word4 and word5 and word6:
+        # Изменение текста кнопки в зависимости от заполненности полей
+        generate_button.config(text="генерировать", bg="green")
+        
+        # Генерация результатов
+        results = [
+            f"0 и={word1};р={word2};д={word3};т={word4};мн={word5}",
+            f"1 и={word1};р={word2};д={word3};т={word4};мн={word5}",
+            f"2 и={word1};р={word2};д={word3};т={word4};мн={word5}",
+            f"3 и={word1};р={word2};д={word3};т={word4};мн={word5}",
+            f"4 и={word1};р={word2};д={word3};т={word4};мн={word5}",
+            f"5 и={word1};р={word2};д={word3};т={word4};мн={word5}"
+        ]
+        
+        # Вывод результатов во втором окне
+        result_text.config(state=tk.NORMAL)
+        result_text.delete(1.0, tk.END)
+        for result in results:
+            result_text.insert(tk.END, result + "\n")
+        result_text.config(state=tk.DISABLED)
+    else:
+        # Изменение текста кнопки в зависимости от заполненности полей
+        generate_button.config(text="генерировать", bg="red")
+
+# Создание графического интерфейса
+root = tk.Tk()
+root.title("Генератор результатов")
+
+# Создание текстовых полей для ввода слов
+entry1 = tk.Entry(root)
+entry1.insert(0, "Введите название модератора")
+entry1.pack()
+entry2 = tk.Entry(root)
+entry2.insert(0, "Введите название модератора")
+entry2.pack()
+entry3 = tk.Entry(root)
+entry3.insert(0, "Введите название модератора")
+entry3.pack()
+entry4 = tk.Entry(root)
+entry4.insert(0, "Введите название модератора")
+entry4.pack()
+entry5 = tk.Entry(root)
+entry5.insert(0, "Введите название модератора")
+entry5.pack()
+entry6 = tk.Entry(root)
+entry6.insert(0, "Введите название модератора")
+entry6.pack()
+
+# Создание кнопки для генерации результатов
+generate_button = tk.Button(root, text="генерировать", command=generate_results)
+generate_button.pack()
+
+# Создание второго окна для вывода результатов
+result_text = tk.Text(root, height=10, width=50)
+result_text.pack()
+
+# Создание кнопки для копирования результатов
+copy_button = tk.Button(root, text="скопировать")
+copy_button.pack()
+
+# Запуск графического интерфейса
+root.mainloop()
