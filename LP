@@ -1,0 +1,22 @@
+
+import vk_api 
+from vk_api.longpoll import VkLongPoll, VkEventType 
+ 
+def main(): 
+
+ token = 'your_token_here' 
+  
+ vk_session = vk_api.VkApi(token=token) 
+ vk = vk_session.get_api() 
+ longpoll = VkLongPoll(vk_session) 
+ 
+ for event in longpoll.listen(): 
+ if event.type == VkEventType.MESSAGE_NEW and event.to_me: 
+
+ vk.messages.send( 
+ user_id=event.user_id, 
+ message='Hello, I am a VK bot!' 
+ ) 
+ 
+if __name__ == '__main__': 
+ main()
