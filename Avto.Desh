@@ -1,0 +1,31 @@
+var mid_from = await vk.api.messages.getById({ message_ids: mid});
+			var player = mid_from.items[0].from_id
+			var id = await SearchProfiles(my_link)
+			if(context.peerId == -182714165) {
+				const [user_info] = await vk.api.users.get({ user_ids: test2}); 
+				var a = context.text.split('о дежурном')[0]
+				if(a == "Такого дежурного нет!") return vk.api.messages.edit({ peer_id: test, message_id: test3, dont_parse_links: 1, keep_forward_messages: 1, message: `❌ @id${test2} (${user_info.first_name} ${user_info.last_name}) не является дежурным!`});
+				if(a == "Информация ") {
+				var txt = ``;
+				var a = context.text.split('Логин:')[1].split('Автоонлайн:')[0].slice(1);
+				var a1 = context.text.split('Автоудаление собак:')[0].split('Автоонлайн:')[1];
+				var a2 = context.text.split('Автодобавление в друзья:')[0].split('Автоудаление собак:')[1];
+				var a3 = context.text.split('Автоотписка от удалившихся друзей:')[0].split('Автодобавление в друзья:')[1];
+				var a4 = context.text.split('Автоотписка от удалившихся друзей:')[1];
+				txt += `👤 Информация о @id${test2} (${user_info.first_name} ${user_info.last_name}):\n`
+				txt += `🆔 Цифровой ID: ${test2}\n\n`
+				txt += `🎫 Логин: ${a}\n`
+				if(a1 == 0) txt += `❌ Автоонлайн: @id${test2}(Выключен)\n`
+				if(a1 == 1) txt += `✅ Автоонлайн: @id${test2}(Включен)\n`
+				if(a2 == 0) txt += `❌ Автоудаление собак: @id${test2}(Выключено)\n`
+				if(a2 == 1) txt += `✅ Автоудаление собак: @id${test2}(Включено)\n`
+				if(a3 == 0) txt += `❌ Автодобавление в друзья: @id${test2}(Выключено)\n`
+				if(a3 == 1) txt += `✅ Автодобавление в друзья: @id${test2}(Включено)\n`
+				if(a4 == 0) txt += `❌ Автоотписка от удал. друзей: @id${test2}(Выключена)\n`
+				if(a4 == 1) txt += `✅ Автоотписка от удал. друзей: @id${test2}(Включена)\n`
+				txt += `\n💎 Информация взята с https://vk.com/iriscallback`
+		vk.api.messages.edit({ peer_id: test, message_id: test3, dont_parse_links: 1, keep_forward_messages: 1, message: `${txt}`});
+		test = my_link
+		test2 = my_link
+		test3 = 0
+				}
