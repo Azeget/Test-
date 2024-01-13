@@ -1,0 +1,90 @@
+python
+# Приветственное сообщение
+welcome_message = "🖐Привет🖐\n⌚Вот список авто действий⌚\n"
+
+# Проверка статуса авто действия
+def check_status(status):
+    if status:
+        return "✅"  # Включено
+    else:
+        return "❌"  # Выключено
+
+# Список авто действий
+auto_actions = [
+    "1. Авто добавление в друзья : {status}",
+    "2. Авто удаление удаленных пользователей : {status}",
+    "3. Авто удаление заблокированных пользователей : {status}",
+    "4. Авто добавление в ЧС удаленных пользователей : {status}",
+    "5. Авто добавление в ЧС заблокированных пользователей : {status}"
+]
+
+# Команда вывода авто действий и их статусов
+def get_auto_actions(prefix):
+    message = welcome_message
+    for action in auto_actions:
+        message += action.format(status=check_status(True)) + "\n"
+    message += f"\nВаш прифекс : {prefix}\n"
+    message += "Если стоит {✅} тогда команда включена {❌} если команда выключена по умолчанию прифекс \".л\""
+    return message
+
+# Команда для изменения статуса авто добавления в друзья
+def set_auto_add_friends(prefix, status):
+    if status:
+        return f"Включение {prefix}+адр"
+    else:
+        return f"Выключение {prefix}-адр"
+
+# Команда для изменения статуса авто удаления удаленных пользователей
+def set_auto_remove_deleted_users(prefix, status):
+    if status:
+        return f"Включение {prefix}+удсобак"
+    else:
+        return f"Выключение {prefix}-удсобак"
+
+# Команда для изменения статуса авто удаления заблокированных пользователей
+def set_auto_remove_blocked_users(prefix, status):
+    if status:
+        return f"Включение {prefix}+удзоб"
+    else:
+        return f"Выключение {prefix}-удзоб"
+
+# Команда для изменения статуса авто добавления в ЧС удаленных пользователей
+def set_auto_add_to_blacklist_deleted_users(prefix, status):
+    if status:
+        return f"Включение {prefix}+чссобак"
+    else:
+        return f"Выключение {prefix}-чссобак"
+
+# Команда для изменения статуса авто добавления в ЧС заблокированных пользователей
+def set_auto_add_to_blacklist_blocked_users(prefix, status):
+    if status:
+        return f"Включение {prefix}+чсзоб"
+    else:
+        return f"Выключение {prefix}-чсзоб"
+
+# Функция для обработки команд пользователя
+def process_command(command, prefix=".л"):
+    if command == f"{prefix} автод":
+        return get_auto_actions(prefix)
+    elif command == f"{prefix} автод +адр":
+        return set_auto_add_friends(prefix, True)
+    elif command == f"{prefix} автод -адр":
+        return set_auto_add_friends(prefix, False)
+    elif command == f"{prefix} автод +удсобак":
+        return set_auto_remove_deleted_users(prefix, True)
+    elif command == f"{prefix} автод -удсобак":
+        return set_auto_remove_deleted_users(prefix, False)
+    elif command == f"{prefix} автод +удзоб":
+        return set_auto_remove_blocked_users(prefix, True)
+    elif command == f"{prefix} автод -удзоб":
+        return set_auto_remove_blocked_users(prefix, False)
+    elif command == f"{prefix} автод +чссобак":
+        return set_auto_add_to_blacklist_deleted_users(prefix, True)
+    elif command == f"{prefix} автод -чссобак":
+        return set_auto_add_to_blacklist_deleted_users(prefix, False)
+    elif command == f"{prefix} автод +чсзоб":
+        return set_auto_add_to_blacklist_blocked_users(prefix, True)
+    elif command == f"{prefix} автод -чсзоб":
+        return set_auto_add_to_blacklist_blocked_users(prefix, False)
+    else:
+        return "Недопустимая команда"
