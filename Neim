@@ -1,0 +1,29 @@
+import vk_api
+from vk_api.longpoll import VkLongPoll, VkEventType
+import random
+
+# Функция для изменения названия чата
+def change_chat_title(vk, chat_id, new_title):
+    try:
+        vk.messages.editChat(chat_id=chat_id, title=new_title)
+    except vk_api.VkApiError as e:
+        print(e)
+
+# Главный цикл
+for event in longpoll.listen():
+    if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text.lower().startswith('!изменить_название_чата'):
+        chat_id = event.chat_id
+        new_title = event.text[22:].strip()
+        if new_title:
+            change_chat_title(vk, chat_id, new_title)
+            vk.messages.send(
+                chat_id=chat_id,
+                message="✅ Название чата успешно изменено ✅",
+                random_id=random.getrandbits(32)
+            )
+        else:
+            vk.messages.send(
+                chat_id=chat_id,
+                message="❓ Укажите новое название для чата ❓",
+                random_id=random.getrandbits(32)
+            )
