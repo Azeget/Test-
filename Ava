@@ -1,0 +1,22 @@
+import vk_api
+import random
+
+# Функция для изменения аватара чата
+def change_chat_photo(api, chat_id, photo_url):
+    try:
+        upload = vk_api.VkUpload(api)
+        photo = upload.photo_messages(photo_url)[0]
+        api.messages.editChat(chat_id=chat_id, title='New title', photo=photo)
+        api.messages.send(chat_id=chat_id, message="✅ Аватар успешно изменен ✅", random_id=random.randint(0, 2 ** 64))
+    except vk_api.VkApiError as e:
+        api.messages.send(chat_id=chat_id, message="⚠️ Ошибка при попытке изменить аватар ⚠️", random_id=random.randint(0, 2 ** 64))
+  
+# Бот ожидает команды "нава" с прикреплённым изображением
+    for event in longpoll.listen():
+        if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat and event.text.lower().startswith('нава'):
+            chat_id = event.chat_id
+            if event.attachments and 'photo' in event.attachments:
+                photo_url = event.attachments['photo']
+                change_chat_photo(vk, chat_id, photo_url)
+            else:
+                vk.messages.send(chat_id=chat_id, message="❌ Пожалуйста, прикрепите изображение ❌", random_id=random.randint(0, 2 ** 64))
