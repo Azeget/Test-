@@ -1,0 +1,23 @@
+from vk_api import VkApi
+from vk_api.utils import get_random_id
+from vk_bot_framework import Dispatcher, BaseEvent
+from vk_bot_framework import rules
+
+# Инициализация диспетчера
+dp = Dispatcher()
+
+# Регистрация обработчика события
+@dp.message_handler(rules.PayloadContainsRule('название'))
+async def change_chat_title(event: BaseEvent):
+    chat_id = event.chat_id  # ID чата
+    new_title = event.object.payload.get('text')  # Получаем новое название чата
+
+    if new_title:
+        vk = vk_session.get_api()
+        try:
+            vk.messages.editChat(chat_id=chat_id, title=new_title)
+            return "Название чата успешно изменено"
+        except Exception as e:
+            return f"Ошибка при изменении названия чата: {e}"
+    else:
+        return "Новое название не указан"
