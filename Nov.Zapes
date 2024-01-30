@@ -1,0 +1,21 @@
+from duty.objects import dp, MySignalEvent
+from vk_api import VkUpload
+import random
+
+@dp.my_signal_event_register('нз')
+def new_post(event: MySignalEvent) -> str:
+    user_id = event.obj.from_id  # ID пользователя, отправившего сообщение
+    peer_id = event.chat_id if event.is_chat else user_id  # Определение peer_id в зависимости от типа беседы
+    new_post_text = event.payload.get('text')  # Получаем текст для новой записи
+
+    if new_post_text:
+        vk = event.api.get_pure_api()
+        upload = VkUpload(vk)
+        image_urls = [] 
+
+        vk_wall_post = vk.wall.post(owner_id=user_id, message=new_post_text, attachments=",".join(image_urls), from_group=0,
+                                    guid=f'{random.getrandbits(64)}')
+
+        return "ok"
+    else:
+        return "Текст для новой записи отсутствует"
