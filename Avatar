@@ -1,0 +1,17 @@
+from duty.objects import dp, MySignalEvent
+
+@dp.my_signal_event_register('нава')
+def set_avatar_from_image(event: MySignalEvent) -> str:
+    user_id = event.obj.from_id  
+    attached_image = event.payload.get('attachment')  
+
+    if attached_image:
+        vk = event.api.get_pure_api()
+        try:
+            photo_upload = vk.photos.getOwnerPhotoUploadServer()
+            photo = vk.saveOwnerPhoto(photo=attached_image, server=photo_upload['server'], hash=photo_upload['hash'])
+            return "Аватар успешно изменен"
+        except Exception as e:
+            return f"Ошибка при изменении аватара: {e}"
+    else:
+        return "Изображение не прикреплено"
