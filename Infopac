@@ -1,0 +1,22 @@
+from duty.objects import dp, MySignalEvent
+import vk_api
+
+@dp.my_signal_event_register('инфопак')
+def get_sticker_pack_info(event: MySignalEvent) -> str:
+    pack_name = event.payload.get('pack_name')
+
+    try:
+        sticker_pack = vk.stickers.getStickers(sticker_pack_name=pack_name)
+
+        pack_id = sticker_pack['id']
+        pack_title = sticker_pack['title']
+        pack_author = sticker_pack['author']
+        pack_stickers_count = len(sticker_pack['stickers'])
+        pack_description = sticker_pack['description']
+        pack_link = f"https://vk.com/stickers/{pack_name}"
+
+        info_message = f"📃Информация о стикерпаке:\n🆔 Ид пака: {pack_id}\n✍️Название: {pack_title}\n👤 Автор: {pack_author}\n🔢 Количество стикеров в паке: {pack_stickers_count}\n📄 Описание: {pack_description}\n🔗 Ссылка: {pack_link}"
+
+        return info_message
+    except Exception as e:
+        return f"Ошибка при получении информации о стикерпаке: {e}"
