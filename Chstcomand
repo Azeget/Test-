@@ -1,0 +1,62 @@
+            del_count += 1
+
+    await message.ctx_api.messages.delete(message_ids=message_ids, delete_for_all=1)
+
+
+@chat_commands.message(IsCommand(['закрепить', 'pin']))
+async def pin_message(message: Message):
+    info = await Users.filter(user_id=message.from_id).first()
+    if info.subscriber == 'vip' or info.subscriber == 'gold':
+        if not message.reply_message.message_id:
+            send_message = f'✅ Укажите сообщение, которое нужно закрепить.'
+            return await edit_messages(message, send_message)
+
+        await message.ctx_api.messages.pin(peer_id=message.peer_id,
+                                           conversation_message_id=message.conversation_message_id)
+        send_message = f'✅ Успешно закреплено.'
+        return await edit_messages(message, send_message)
+    send_message = f"❎ Эта команда доступна минимум с подписки VIP"
+    return await edit_messages(message, send_message)
+
+
+@chat_commands.message(IsCommand(['открепить', 'unpin']))
+async def unpin_message(message: Message):
+    info = await Users.filter(user_id=message.from_id).first()
+    if info.subscriber == 'vip' or info.subscriber == 'gold':
+        try:
+            unpin = await message.ctx_api.messages.unpin(peer_id=message.peer_id)
+            if unpin == 1:
+                send_message = f'✅ Успешно откреплено.'
+                return await edit_messages(message, send_message)
+            else:
+                send_message = f'❎ Ошибка.'
+                return await edit_messages(message, send_message)
+        except:
+            send_message = f'❎ Для выполнения данной команды вы должны иметь право закреплять сообщения в текущем чате.'
+            return await edit_messages(message, send_message)
+    send_message = f"❎ Эта команда доступна минимум с подписки VIP"
+    return await edit_messages(message, send_message)
+
+
+@chat_commands.message(IsCommand(['+адм', '+adm']))
+async def get_role_in_chat(message: Message):
+    try:
+        user_id = await search_user_id(message)
+        await message.ctx_api.request('messages.setMemberRole', {'peer_id': message.peer_id, 'member_id': user_id, 'role': 'admin'})
+        send_message = f'✅ [id{user_id}|Пользователь] повышен до админа.'
+        return await edit_messages(message, send_message)
+    except Exception as e:
+        send_message = f"❎ Произошла ошибка.\n{e}"
+        return await edit_messages(message, send_message)
+
+
+@chat_commands.message(IsCommand(['-adm', '-адм']))
+async def remove_role_in_chat(message: Message):
+    try:
+        user_id = await search_user_id(message)
+        await message.ctx_api.request('messages.setMemberRole', {'peer_id': message.peer_id, 'member_id': user_id, 'role': 'member'})
+        send_message = f'✅ [id{user_id}|Пользователь] снят с админа.'
+        return await edit_messages(message, send_message)
+    except Exception as e:
+        send_message = f"❎ Произошла ошибка.\n{e}"
+        return await edit_messages(message, send_message)
